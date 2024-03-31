@@ -21,16 +21,8 @@ const HomePage = () => {
         </p>
       </div>
       <div className="space-x-4">
-        <Link href="/sign-up" className="btn btn-sm btn-primary font-semibold">
+        <Link href="/sign-up" className="btn btn-primary font-semibold">
           Sign-up
-        </Link>
-
-        <Link href="/login" className="btn btn-sm btn-secondary font-semibold">
-          Login
-        </Link>
-
-        <Link href="/about" className="btn btn-sm btn-accent font-semibold">
-          About
         </Link>
       </div>
     </>

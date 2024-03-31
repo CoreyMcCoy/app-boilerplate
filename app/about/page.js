@@ -14,7 +14,7 @@ const AboutPage = () => {
           blanditiis reiciendis error!
         </p>
       </div>
-      <Link href="/" className="btn btn-sm btn-primary font-semibold">
+      <Link href="/" className="btn btn-primary font-semibold">
         Home
       </Link>
     </div>
