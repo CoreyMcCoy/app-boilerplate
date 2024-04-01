@@ -1,11 +1,16 @@
+'use client';
+
 import Link from 'next/link';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 const links = [
   { href: '/about', label: 'About', color: 'base-content' },
+  { href: '/pricing', label: 'Pricing', color: 'base-content' },
   { href: '/data', label: 'Data', color: 'text-accent' },
-  { href: '/sign-up', label: 'Sign-up', color: 'base-content' },
 ];
 const Navbar = () => {
+  const { data: session, status } = useSession();
   return (
     <div className="navbar bg-base-300 px-8">
       <div className="navbar-start">
@@ -42,7 +47,18 @@ const Navbar = () => {
           </ul>
         </div>
         <Link href="/" className="font-semibold pl-2 lg:p-0">
-          SaaS App Boilerplate
+          {/* display the Image: saas-icon.png if screen is smaller than large */}
+          <div className="hidden lg:flex">
+            <span className="text-lg">SaaS Boilerplate</span>
+          </div>
+          <div className="lg:hidden">
+            <Image
+              src="/saas-icon.png"
+              alt="SaaS Icon"
+              width={40}
+              height={40}
+            />
+          </div>
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
@@ -59,9 +75,26 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link href="#" className="btn">
-          Login
-        </Link>
+        {status === 'authenticated' ? (
+          <>
+            <div className="hidden md:flex">
+              <Image
+                src={session.user.image}
+                alt={session.user.name}
+                width={50}
+                height={50}
+                className="mr-4 rounded-full"
+              />
+            </div>
+            <Link href="#" onClick={() => signOut()} className="btn">
+              Logout
+            </Link>
+          </>
+        ) : (
+          <Link href="#" onClick={() => signIn('google')} className="btn">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );

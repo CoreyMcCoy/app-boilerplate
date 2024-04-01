@@ -23,7 +23,7 @@ const DataPage = async () => {
           consequuntur excepturi aliquid obcaecati rem tenetur accusamus
           quibusdam, dolorum harum provident?
         </p>
-        <div className="mockup-code mt-4 lg:w-3/4 shadow-lg">
+        <div className="mockup-code mt-4 lg:w-3/4 border-gray-700 border-2 shadow-lg">
           <pre data-prefix="$">
             <code className="text-sm">
               https://jsonplaceholder.typicode.com/posts?_limit=20
