@@ -9,11 +9,13 @@ const links = [
   { href: '/pricing', label: 'Pricing', color: 'base-content' },
   { href: '/data', label: 'Data', color: 'text-accent' },
 ];
+
 const Navbar = () => {
   const { data: session, status } = useSession();
   return (
     <div className="navbar bg-base-300 px-8">
       <div className="navbar-start">
+        {/* Mobile view */}
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <svg
@@ -46,6 +48,9 @@ const Navbar = () => {
             })}
           </ul>
         </div>
+        {/* End mobile view */}
+
+        {/* Desktop view */}
         <Link href="/" className="font-semibold pl-2 lg:p-0">
           {/* display the Image: saas-icon.png if screen is smaller than large */}
           <div className="hidden lg:flex">
@@ -74,6 +79,9 @@ const Navbar = () => {
           })}
         </ul>
       </div>
+      {/* End desktop view */}
+
+      {/* Image and button */}
       <div className="navbar-end">
         {status === 'authenticated' ? (
           <>
