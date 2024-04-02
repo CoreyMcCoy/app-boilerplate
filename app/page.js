@@ -1,10 +1,11 @@
 import UserInfo from '@/components/UserInfo';
+import AddDataForm from '@/components/AddDataForm';
 
 const HomePage = () => {
   return (
-    <div>
+    <>
       <UserInfo />
-    </div>
+    </>
   );
 };
 export default HomePage;
