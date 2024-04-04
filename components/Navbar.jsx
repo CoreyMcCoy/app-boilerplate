@@ -6,8 +6,7 @@ import Image from 'next/image';
 
 const links = [
   { href: '/about', label: 'About', color: 'base-content' },
-  { href: '/pricing', label: 'Pricing', color: 'base-content' },
-  { href: '/data', label: 'Data', color: 'text-accent' },
+  { href: '/pricing', label: 'Pricing', color: 'text-accent' },
 ];
 
 const Navbar = () => {
