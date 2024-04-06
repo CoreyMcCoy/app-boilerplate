@@ -40,11 +40,11 @@ const UserInfo = () => {
           blanditiis reiciendis error!
         </p>
       </div>
-      {status === 'authenticated' ? null : (
+      {/* {status === 'authenticated' ? null : (
         <div className="space-x-4">
           <SignInBtn />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -6,7 +6,8 @@ import Image from 'next/image';
 
 const links = [
   { href: '/about', label: 'About', color: 'base-content' },
-  { href: '/pricing', label: 'Pricing', color: 'text-accent' },
+  { href: '/pricing', label: 'Pricing', color: 'base-content' },
+  { href: '/register', label: 'Register', color: 'text-accent' },
 ];
 
 const Navbar = () => {
@@ -16,7 +17,7 @@ const Navbar = () => {
       <div className="navbar-start">
         {/* Mobile view */}
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div tabIndex={0} role="button" className="btn btn-ghost md:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -65,7 +66,7 @@ const Navbar = () => {
           </div>
         </Link>
       </div>
-      <div className="navbar-center hidden lg:flex">
+      <div className="navbar-center hidden md:flex">
         <ul className="menu menu-horizontal px-1">
           {links.map((link) => {
             return (
@@ -84,21 +85,12 @@ const Navbar = () => {
       <div className="navbar-end">
         {status === 'authenticated' ? (
           <>
-            <div className="hidden md:flex">
-              <Image
-                src={session.user.image}
-                alt={session.user.name}
-                width={50}
-                height={50}
-                className="mr-4 rounded-full"
-              />
-            </div>
             <Link href="#" onClick={() => signOut()} className="btn">
               Logout
             </Link>
           </>
         ) : (
-          <Link href="#" onClick={() => signIn('google')} className="btn">
+          <Link href="#" onClick={() => signIn()} className="btn">
             Login
           </Link>
         )}
