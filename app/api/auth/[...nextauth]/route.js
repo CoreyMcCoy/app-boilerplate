@@ -1,7 +1,9 @@
 import { connectMongoDB } from '@/lib/mongodb';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import User from '@/models/User';
+import bcrypt from 'bcrypt';
 
 const authOptions = {
   providers: [
@@ -21,6 +23,32 @@ const authOptions = {
       },
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+
+    CredentialsProvider({
+      id: 'credentials',
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
+
+      async authorize(credentials) {
+        await connectMongoDB();
+        const { email, password } = credentials;
+
+        try {
+          const user = await User.findOne({ email });
+
+          if (!user || user.password !== password) {
+            throw new Error('Invalid email or password');
+          }
+
+          return { email: user.email, role: user.role };
+        } catch (error) {
+          throw new Error('Invalid email or password');
+        }
+      },
     }),
   ],
 
@@ -43,6 +71,18 @@ const authOptions = {
       }
 
       return user;
+    },
+
+    async jwt(token, user) {
+      if (user) {
+        token = { ...token, ...user };
+      }
+      return token;
+    },
+
+    async session(session, user) {
+      session.user = user;
+      return session;
     },
   },
 };

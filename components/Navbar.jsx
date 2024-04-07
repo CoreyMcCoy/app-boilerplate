@@ -90,7 +90,7 @@ const Navbar = () => {
             </Link>
           </>
         ) : (
-          <Link href="#" onClick={() => signIn()} className="btn">
+          <Link href="/login" className="btn">
             Login
           </Link>
         )}
