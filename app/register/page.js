@@ -69,7 +69,7 @@ const RegisterPage = () => {
       });
 
       if (response.ok) {
-        router.push('/');
+        router.push('/login');
       } else {
         const data = await response.json();
         setErrorMessage(data.message);
@@ -81,13 +81,12 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="md:w-1/2 mx-auto text-center">
-      <div className="mx-auto ">
-        <h1 className="text-4xl font-bold mb-8">Register</h1>
-        <p className="mb-8">Set-up your account.</p>
-      </div>
-
-      <form onSubmit={handleSubmit}>
+    <>
+      <h1 className="text-2xl font-medium mb-8">Sign-up</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full p-6 rounded-lg border-2 border-gray-700"
+      >
         <label className="text-sm input input-bordered border-2 flex items-center mb-5 gap-2">
           <input
             type="text"
@@ -142,7 +141,7 @@ const RegisterPage = () => {
         </button>
       </form>
       {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-    </div>
+    </>
   );
 };
 export default RegisterPage;

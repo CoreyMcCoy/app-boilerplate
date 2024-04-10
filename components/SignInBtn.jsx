@@ -7,10 +7,12 @@ export default function SignInBtn() {
   return (
     <button
       onClick={() => signIn('google')}
-      className="btn btn-btn-ghost font-semibold"
+      className="btn bg-white hover:bg-slate-200 w-96"
     >
-      <span className="font-semibold">Login with</span>
       <Image src="/google.png" alt="Google Logo" width={20} height={20} />
+      <span className="font-medium text-info-content ml-2 ">
+        Sign-in with Google
+      </span>
     </button>
   );
 }

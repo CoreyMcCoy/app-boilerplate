@@ -4,30 +4,18 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import User from '@/models/User';
 import bcrypt from 'bcrypt';
+import { NewResponse } from 'next/server';
 
 const authOptions = {
   providers: [
     GoogleProvider({
-      profile(profile) {
-        console.log('Google profile', profile);
-
-        let userRole = 'google user';
-        if (profile.email === process.env.ADMIN_EMAIL) {
-          userRole = 'admin';
-        }
-        return {
-          ...profile,
-          id: profile.sub,
-          role: userRole,
-        };
-      },
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
 
     CredentialsProvider({
       id: 'credentials',
-      name: 'Credentials',
+      name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
@@ -38,20 +26,34 @@ const authOptions = {
         const { email, password } = credentials;
 
         try {
+          // Check to see if email and password are valid
+          if (!email || !password) {
+            return null;
+          }
+          // Check if user exists in database
           const user = await User.findOne({ email });
 
-          if (!user || user.password !== password) {
-            throw new Error('Invalid email or password');
+          if (!user) {
+            return new NewResponse(401, { message: 'Invalid credentials' });
           }
 
-          return { email: user.email, role: user.role };
+          // Compare password with hashed password
+          const isValid = await bcrypt.compare(password, user.password);
+
+          if (!isValid) {
+            return new NewResponse(401, { message: 'Invalid credentials' });
+          }
+
+          // Return user if email and password are valid
+          return user;
         } catch (error) {
-          throw new Error('Invalid email or password');
+          console.error('Error logging in user: 👉', error);
+          return new NewResponse(500, { message: 'Error logging in user' });
         }
       },
     }),
   ],
-
+  // Callbacks for Google provider
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account.provider === 'google') {
@@ -72,19 +74,16 @@ const authOptions = {
 
       return user;
     },
-
-    async jwt(token, user) {
-      if (user) {
-        token = { ...token, ...user };
-      }
-      return token;
-    },
-
-    async session(session, user) {
-      session.user = user;
-      return session;
-    },
   },
+
+  // Enable JSON Web Tokens
+  session: {
+    strategy: 'jwt',
+  },
+
+  // Create JWT secret from environment variable
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 };
 
 const handler = NextAuth(authOptions);

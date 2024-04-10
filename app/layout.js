@@ -16,7 +16,9 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <NextAuthProvider>
           <Navbar />
-          <main className="px-8 py-10 max-w-6xl mx-auto">{children}</main>
+          <main className="px-8 py-20 max-w-xl flex flex-col items-center mx-auto text-center">
+            {children}
+          </main>
         </NextAuthProvider>
       </body>
     </html>
