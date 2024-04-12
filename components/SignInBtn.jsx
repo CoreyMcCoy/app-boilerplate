@@ -7,7 +7,7 @@ export default function SignInBtn() {
   return (
     <button
       onClick={() => signIn('google')}
-      className="btn bg-white hover:bg-slate-200 w-96"
+      className="btn bg-white hover:bg-white w-full"
     >
       <Image src="/google.png" alt="Google Logo" width={20} height={20} />
       <span className="font-medium text-info-content ml-2 ">

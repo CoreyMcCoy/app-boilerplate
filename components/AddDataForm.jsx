@@ -1,6 +1,6 @@
 'use client';
 
-import { addUser, updateUser } from '@/app/actions/formActions';
+import { updateUser } from '@/app/actions/formActions';
 
 // This is a form component that will be used to add data to the database
 const AddDataForm = () => {

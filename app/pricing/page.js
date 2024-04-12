@@ -10,6 +10,17 @@ import { useRouter } from 'next/navigation';
 const PricingPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleCheckout = async (e) => {
     e.preventDefault();
@@ -24,99 +35,79 @@ const PricingPage = () => {
     }
   };
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    signIn('credentials', {
-      ...formData,
-      redirect: false,
-    });
 
-    router.push('/');
+    try {
+      const res = await signIn('credentials', {
+        ...formData,
+        redirect: false,
+      });
 
-    setErrorMessage('');
+      if (res?.error) {
+        setErrorMessage(res.error);
+        return;
+      }
+      setErrorMessage('');
+
+      // router.push('/');
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      // Close the modal
+      const modal = document.getElementById('my_modal_2');
+      modal.close();
+    }
   };
 
   return (
     <>
-      <h1 className="text-2xl font-medium mb-6">Pricing</h1>
+      <h1 className="text-2xl font-medium mb-6 text-white">Pricing</h1>
       <form
         onSubmit={handleCheckout}
-        className="w-full p-6 rounded-lg border-2 border-gray-700 relative overflow-hidden"
+        className="w-full py-10 px-6 bg-white rounded-lg"
       >
-        <h3 className="text-xl mb-8">30 Credits</h3>
-        <h2 className="text-4xl font-semibold">$18</h2>
-        <p className="my-2">One-time payment</p>
-        <button
-          type="submit"
-          className="btn flex text-center items-center w-full focus:outline-none rounded my-6"
-        >
-          Button
-          <svg
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="w-4 h-4 ml-auto"
-            viewBox="0 0 24 24"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
+        <p className="text-xl font-medium mb-8">30 Credits</p>
+        <p className="text-4xl font-semibold mb-6">
+          $18<span className="text-base font-normal">/One-time payment</span>
+        </p>
+        <button type="submit" className="btn btn-primary mb-4 w-full">
+          But now
         </button>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs">
           Literally you probably haven't heard of them jean shorts.
         </p>
       </form>
       {/* Modal */}
       <dialog id="my_modal_2" className="modal text-center">
-        <div className="modal-box h-3/5 flex flex-col justify-center items-center">
-          <h3 className="font-medium mb-6">You must be signed in</h3>
-          <form
-            onSubmit={handleSubmit}
-            className="w-full p-6 rounded-lg text-black"
-          >
-            <label className="text-sm input bg-gray-200 flex items-center mb-5 gap-2">
-              <input
-                type="email"
-                placeholder="Email"
-                name="email"
-                required
-                className="placeholder-slate-700"
-                onChange={handleChange}
-                defaultValue={formData.email}
-              />
-            </label>
+        <div className="modal-box flex flex-col justify-center items-center bg-white py-10">
+          <p className="text-xl font-medium mb-8">You must be signed in.</p>
+          <form onSubmit={handleSubmit} className="w-full">
+            <input
+              type="text"
+              placeholder="Email"
+              name="email"
+              required
+              className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
+              onChange={handleChange}
+              defaultValue={formData.email}
+            />
 
-            <label className="text-sm input bg-gray-200 flex items-center mb-5 gap-2">
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                required
-                className="placeholder-slate-700"
-                onChange={handleChange}
-                defaultValue={formData.password}
-              />
-            </label>
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              required
+              className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
+              onChange={handleChange}
+              defaultValue={formData.password}
+            />
 
-            <button
-              type="submit"
-              className="btn btn-success font-semibold w-full"
-            >
+            <button type="submit" className="btn btn-primary w-full">
               Sign-in with Credentials
             </button>
           </form>
-          <p className="my-3 text-sm">- or -</p>
+          <p className="my-3">- or -</p>
           <SignInBtn />
           {errorMessage && (
             <p className="text-red-500 text-sm">{errorMessage}</p>

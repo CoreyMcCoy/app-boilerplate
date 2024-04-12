@@ -1,10 +1,12 @@
 'use client';
 
+import SignInBtn from '@/components/SignInBtn';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const RegisterPage = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [formData, setFormData] = useState({
     name: '',
@@ -13,53 +15,53 @@ const RegisterPage = () => {
     password2: '',
   });
 
-  // Validate email address
-  const isValidEmail = (email) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    return emailRegex.test(email);
-  };
-
   // Handle form input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password, password2 } = formData;
-
-    // Check if email is valid, and if not, set an error message
-    if (!isValidEmail(email)) {
-      setErrorMessage('Invalid email address');
-      return;
-    }
-
-    // Check if passwords match, and if not, set an error message
-    if (password !== password2) {
-      setErrorMessage('Passwords do not match');
-      return;
-    }
-
-    // Check if password is at least 8 characters long, and if not, set an error message
-    if (!password || password.length < 8) {
-      setErrorMessage('Password must be at least 8 characters long');
-      return;
-    }
-
-    //! Check if password contains at least one number and one special character. Set for production
-    // const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])/;
-    // if (!passwordRegex.test(password)) {
-    //   setErrorMessage(
-    //     'Password must contain at least one number and one special character'
-    //   );
-    //   return;
-    // }
-
-    // Reset error message
-    setErrorMessage('');
+    setLoading(true);
 
     try {
+      const { name, email, password, password2 } = formData;
+
+      if (!name || !email || !password || !password2) {
+        setErrorMessage('All fields are required');
+        return;
+      }
+
+      // Validate email address
+      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+      if (!emailRegex.test(email)) {
+        setErrorMessage('Invalid email address');
+        return;
+      }
+
+      // Check if passwords match, and if not, set an error message
+      if (password !== password2) {
+        setErrorMessage('Passwords do not match');
+        return;
+      }
+
+      // Check if password is at least 8 characters long, and if not, set an error message
+      if (!password || password.length < 8) {
+        setErrorMessage('Password must be at least 8 characters long');
+        return;
+      }
+
+      //! Check if password contains at least one number and one special character. Set for production
+      // const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])/;
+      // if (!passwordRegex.test(password)) {
+      //   setErrorMessage(
+      //     'Password must contain at least one number and one special character'
+      //   );
+      //   return;
+      // }
+
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -68,79 +70,84 @@ const RegisterPage = () => {
         body: JSON.stringify({ name, email, password }),
       });
 
-      if (response.ok) {
-        router.push('/login');
-      } else {
+      if (response.status === 201 || response.status === 200) {
         const data = await response.json();
-        setErrorMessage(data.message);
+        console.log('User registered successfully: ', data);
+        // Redirect to login page and send populated email field
+        router.push(`/login?email=${email}`);
+        return;
       }
+
+      // Reset error message
+      setErrorMessage('');
     } catch (error) {
       console.error('Error registering user: ', error);
       setErrorMessage('Error registering user');
+    } finally {
+      setLoading(false);
+
+      // Reset form data
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        password2: '',
+      });
     }
   };
 
   return (
     <>
-      <h1 className="text-2xl font-medium mb-8">Sign-up</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="w-full p-6 rounded-lg border-2 border-gray-700"
-      >
-        <label className="text-sm input input-bordered border-2 flex items-center mb-5 gap-2">
+      <h1 className="text-2xl font-medium mb-6 text-white">Sign-up</h1>
+      <div className="bg-white rounded-lg py-10 px-6">
+        <form onSubmit={handleSubmit} className="text-black">
           <input
             type="text"
             placeholder="Name"
             name="name"
-            className="grow"
             required
+            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
             onChange={handleChange}
             defaultValue={formData.name}
           />
-        </label>
 
-        <label className="text-sm input input-bordered border-2 flex items-center mb-5 gap-2">
           <input
             type="email"
             placeholder="Email"
             name="email"
-            className="grow"
             required
+            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
             onChange={handleChange}
             defaultValue={formData.email}
           />
-        </label>
 
-        <label className="text-sm input input-bordered border-2 flex items-center mb-5 gap-2">
           <input
             type="password"
             placeholder="Password"
             name="password"
-            className="grow"
             required
+            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
             onChange={handleChange}
             defaultValue={formData.password}
           />
-        </label>
-        <label className="text-sm input input-bordered border-2 flex items-center mb-5 gap-2">
+
           <input
             type="password"
             placeholder="Confirm password"
             name="password2"
-            className="grow"
             required
+            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
             onChange={handleChange}
             defaultValue={formData.password2}
           />
-        </label>
-        <button
-          type="submit"
-          className="btn btn-primary font-semibold w-full mb-5"
-        >
-          Register
-        </button>
-      </form>
-      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+          <button type="submit" className="btn btn-primary w-full">
+            {loading ? 'Loading...' : 'Register'}
+          </button>
+        </form>
+        <p className="my-3">- or -</p>
+        <SignInBtn />
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+      </div>
     </>
   );
 };
