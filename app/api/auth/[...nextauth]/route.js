@@ -10,6 +10,7 @@ const authOptions = {
     GoogleProvider({
       profile: (profile) => {
         let userRole = 'user';
+        let accountType = 'trial';
 
         if (profile.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
           userRole = 'admin';
@@ -20,6 +21,7 @@ const authOptions = {
           id: profile.sub,
           image: profile.picture,
           role: userRole,
+          accountType: accountType,
         };
       },
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -68,7 +70,7 @@ const authOptions = {
     async signIn({ user, account, profile }) {
       if (account.provider === 'google') {
         try {
-          const { name, email, role } = user;
+          const { name, email, role, accountType } = user;
           await connectMongoDB();
           const ifUserExists = await User.findOne({ email });
 
@@ -79,6 +81,7 @@ const authOptions = {
             name,
             email,
             role,
+            accountType,
           });
           const res = await newUser.save();
           if (res.status === 200 || res.status === 201) {
@@ -97,6 +100,7 @@ const authOptions = {
         token.email = user.email;
         token.name = user.name;
         token.role = user.role;
+        token.accountType = user.accountType;
       }
       return token;
     },
@@ -106,8 +110,9 @@ const authOptions = {
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.role = token.role;
+        session.user.accountType = token.accountType;
       }
-      console.log(session);
+      console.log('Session from Auth', session);
       return session;
     },
   },

@@ -62,33 +62,30 @@ const PricingPage = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-medium mb-6 text-white">Pricing</h1>
-      <form
-        onSubmit={handleCheckout}
-        className="w-full py-10 px-6 bg-white rounded-lg"
-      >
-        <p className="text-xl font-medium mb-8">30 Credits</p>
-        <p className="text-4xl font-semibold mb-6">
-          $18<span className="text-base font-normal">/One-time payment</span>
-        </p>
-        <button type="submit" className="btn btn-primary mb-4 w-full">
-          But now
-        </button>
-        <p className="text-xs">
-          Literally you probably haven't heard of them jean shorts.
-        </p>
-      </form>
+      <h1 className="mb-6">Pricing</h1>
+      <div>
+        <form onSubmit={handleCheckout}>
+          <p className="mb-8">30 Credits</p>
+          <p className="mb-6">
+            $18<span>/One-time payment</span>
+          </p>
+          <button type="submit" className="btn btn-primary mb-4">
+            But now
+          </button>
+          <p>Literally you probably haven't heard of them jean shorts.</p>
+        </form>
+      </div>
       {/* Modal */}
-      <dialog id="my_modal_2" className="modal text-center">
-        <div className="modal-box flex flex-col justify-center items-center bg-white py-10">
-          <p className="text-xl font-medium mb-8">You must be signed in.</p>
-          <form onSubmit={handleSubmit} className="w-full">
+      <dialog id="my_modal_2" className="modal">
+        <div className="modal-box">
+          <p className="mb-8">You must be signed in.</p>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Email"
               name="email"
               required
-              className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
+              className="input input-bordered w-full mb-4"
               onChange={handleChange}
               defaultValue={formData.email}
             />
@@ -98,12 +95,12 @@ const PricingPage = () => {
               placeholder="Password"
               name="password"
               required
-              className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
+              className="input input-bordered w-full mb-4"
               onChange={handleChange}
               defaultValue={formData.password}
             />
 
-            <button type="submit" className="btn btn-primary w-full">
+            <button type="submit" className="btn w-full">
               Sign-in with Credentials
             </button>
           </form>

@@ -98,56 +98,54 @@ const RegisterPage = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-medium mb-6 text-white">Sign-up</h1>
-      <div className="bg-white rounded-lg py-10 px-6">
-        <form onSubmit={handleSubmit} className="text-black">
-          <input
-            type="text"
-            placeholder="Name"
-            name="name"
-            required
-            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
-            onChange={handleChange}
-            defaultValue={formData.name}
-          />
+      <h1 className="mb-6">Sign-up</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          name="name"
+          required
+          className="input input-bordered w-full mb-4"
+          onChange={handleChange}
+          defaultValue={formData.name}
+        />
 
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            required
-            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
-            onChange={handleChange}
-            defaultValue={formData.email}
-          />
+        <input
+          type="email"
+          placeholder="Email"
+          name="email"
+          required
+          className="input input-bordered w-full mb-4"
+          onChange={handleChange}
+          defaultValue={formData.email}
+        />
 
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            required
-            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
-            onChange={handleChange}
-            defaultValue={formData.password}
-          />
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          required
+          className="input input-bordered w-full mb-4"
+          onChange={handleChange}
+          defaultValue={formData.password}
+        />
 
-          <input
-            type="password"
-            placeholder="Confirm password"
-            name="password2"
-            required
-            className="input input-bordered input-primary border-2 w-full mb-4 bg-white"
-            onChange={handleChange}
-            defaultValue={formData.password2}
-          />
-          <button type="submit" className="btn btn-primary w-full">
-            {loading ? 'Loading...' : 'Register'}
-          </button>
-        </form>
-        <p className="my-3">- or -</p>
-        <SignInBtn />
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-      </div>
+        <input
+          type="password"
+          placeholder="Confirm password"
+          name="password2"
+          required
+          className="input input-bordered w-full mb-4"
+          onChange={handleChange}
+          defaultValue={formData.password2}
+        />
+        <button type="submit" className="btn btn-primary w-full">
+          {loading ? 'Loading...' : 'Register'}
+        </button>
+      </form>
+      <p className="my-3">- or -</p>
+      <SignInBtn />
+      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
     </>
   );
 };

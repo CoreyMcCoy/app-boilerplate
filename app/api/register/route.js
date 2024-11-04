@@ -11,10 +11,7 @@ export async function POST(req) {
 
     // Check if email and password are valid
     if (!name || !email || !password) {
-      return NextResponse.json(
-        { error: 'Please fill in all fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Please fill in all fields' }, { status: 400 });
     }
 
     // Check to see if email is already in use

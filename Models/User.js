@@ -21,7 +21,15 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ['user', 'admin'],
+      required: true,
       default: 'user',
+    },
+
+    accountType: {
+      type: String,
+      enum: ['trial', 'active', 'lifetime'],
+      required: true,
+      default: 'trial',
     },
   },
   {

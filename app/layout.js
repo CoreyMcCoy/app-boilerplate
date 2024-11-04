@@ -12,12 +12,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html data-theme="dark" lang="en">
+    <html data-theme="light" lang="en">
       <body className={inter.className}>
         <NextAuthProvider>
           <Navbar />
-          <main className="px-8 py-20 max-w-xl flex flex-col items-center mx-auto text-center text-black">
-            {children}
+          <main className="container mx-auto">
+            <div className="flex items-start justify-center min-h-screen">
+              <div className="mt-20">{children}</div>
+            </div>
           </main>
         </NextAuthProvider>
       </body>
